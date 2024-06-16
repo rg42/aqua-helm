@@ -212,6 +212,10 @@ global:
       # - envName: ENV_NAME
       #   secretName: name
       #   secretKey: key
+  maintenance_db:
+  #   #Specifies the name of a maintenance database, to be used in place of the default postgres DB.
+  #   #It will define the environment variable AQUA_MAINTENANCE_DBNAME. Nested in globals so it can be used by child charts.  
+    name: ""
 
 gateway:
   enabled: true
@@ -453,10 +457,10 @@ web:
     #provide filename of the rootCA, if using self-signed certificates eg: rootCA.crt
     rootCA_fileName: ""
 
-  maintenance_db:
-    #Specifies the name of a maintenance database, to be used in place of the default postgres DB.
-    #It will define the environment variable AQUA_MAINTENANCE_DBNAME
-    name: ""
+  # maintenance_db:
+  #   #Specifies the name of a maintenance database, to be used in place of the default postgres DB.
+  #   #It will define the environment variable AQUA_MAINTENANCE_DBNAME
+  #   name: ""
 
   # extraEnvironmentVars is a list of extra environment variables to set in the web deployments.
   # https://docs.aquasec.com/docs/server-optional-variables

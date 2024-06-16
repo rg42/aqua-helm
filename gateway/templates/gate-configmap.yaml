@@ -9,6 +9,9 @@ metadata:
     aqua.component: gateway
 {{ include "aqua.labels" . | indent 4 }}
 data:
+  {{- if .Values.global.maintenance_db.name }}
+  AQUA_MAINTENANCE_DBNAME: {{ .Values.global.maintenance_db.name }}
+  {{- end }}
   SCALOCK_LOG_LEVEL: {{ .Values.logLevel | default "INFO" }}
   AQUA_CONSOLE_SECURE_ADDRESS: {{ include "aquaConsoleSecureAddress" . }}
   SCALOCK_GATEWAY_PUBLIC_IP: {{ .Values.publicIP | default (printf "%s-gateway-svc" .Release.Name) }}

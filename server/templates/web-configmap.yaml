@@ -58,8 +58,8 @@ data:
   {{- if .Values.activeactive }}
   AQUA_CLUSTER_MODE: "active-active"  
   {{- end }}
-  {{- if .Values.web.maintenance_db.name }}
-  AQUA_MAINTENANCE_DBNAME: {{ .Values.web.maintenance_db.name }}
+  {{- if .Values.global.maintenance_db.name }}
+  AQUA_MAINTENANCE_DBNAME: {{ .Values.global.maintenance_db.name }}
   {{- end }}
   {{- if .Values.web.TLS.enabled }}
   AQUA_PRIVATE_KEY: "/opt/aquasec/ssl/key.pem"
