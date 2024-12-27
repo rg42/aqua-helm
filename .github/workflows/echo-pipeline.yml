@@ -15,3 +15,15 @@ jobs:
 
       - name: Run Hello-World Container
         run: docker run hello-world
+
+  host-test: # New job running directly on the host
+    runs-on: self-hosted
+    steps:
+      - name: Print Hello
+        run: echo "Hello from the host!"
+
+      - name: Wait for 1 minute
+        run: sleep 60
+
+      - name: Print Exiting
+        run: echo "Exiting..."
