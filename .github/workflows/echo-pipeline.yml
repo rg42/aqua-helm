@@ -1,19 +1,18 @@
-name: Echo and Wait Pipeline
+name: Test Docker Workflow
 
 on:
   push:
     branches:
-      - '*'
+      - '*"
 
 jobs:
-  echo-job:
+  docker-test:
     runs-on: self-hosted
+    container:
+      image: docker:stable
     steps:
-      - name: Echo Start
-        run: echo "Pipeline has started"
+      - name: Check Docker Version
+        run: docker version
 
-      - name: Wait for 1 Minute
-        run: sleep 60
-
-      - name: Echo End
-        run: echo "Pipeline has finished"
+      - name: Run Hello-World Container
+        run: docker run hello-world
