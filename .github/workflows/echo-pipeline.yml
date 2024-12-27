@@ -1,5 +1,10 @@
 name: Echo and Wait Pipeline
 
+on:
+  push:
+    branches:
+      - '*'
+
 jobs:
   echo-job:
     runs-on: self-hosted
