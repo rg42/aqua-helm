@@ -1,0 +1,125 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Exec Agent Graph",
+    "description": "Read-only Microsoft Graph operations for the Executive Assistant agent. Runs as the signed-in user (delegated); access is limited by the app registration's read-only permissions and the user's own access.",
+    "version": "1.1"
+  },
+  "host": "graph.microsoft.com",
+  "basePath": "/",
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "oauth2-auth": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://login.windows.net/common/oauth2/authorize",
+      "tokenUrl": "https://login.windows.net/common/oauth2/authorize",
+      "scopes": {}
+    }
+  },
+  "security": [{ "oauth2-auth": [] }],
+  "parameters": {
+    "Prefer": { "name": "Prefer", "in": "header", "required": false, "type": "string", "x-ms-summary": "Prefer header", "description": "Optional, for example outlook.timezone=\"Eastern Standard Time\"." },
+    "select": { "name": "$select", "in": "query", "required": false, "type": "string", "x-ms-summary": "Select" },
+    "filter": { "name": "$filter", "in": "query", "required": false, "type": "string", "x-ms-summary": "Filter" },
+    "orderby": { "name": "$orderby", "in": "query", "required": false, "type": "string", "x-ms-summary": "Order by" },
+    "top": { "name": "$top", "in": "query", "required": false, "type": "integer", "x-ms-summary": "Top" },
+    "expand": { "name": "$expand", "in": "query", "required": false, "type": "string", "x-ms-summary": "Expand" },
+    "skip": { "name": "$skip", "in": "query", "required": false, "type": "integer", "x-ms-summary": "Skip (paging)" },
+    "skiptoken": { "name": "$skiptoken", "in": "query", "required": false, "type": "string", "x-ms-summary": "Skip token (paging)" }
+  },
+  "paths": {
+    "/v1.0/me": {
+      "get": {
+        "operationId": "GetMe",
+        "summary": "Get my profile",
+        "description": "GET /me - the signed-in user's id and name.",
+        "parameters": [{ "$ref": "#/parameters/select" }],
+        "responses": { "200": { "description": "OK", "schema": { "type": "object" } }, "default": { "description": "Error", "schema": { "type": "object" } } }
+      }
+    },
+    "/v1.0/me/calendarView": {
+      "get": {
+        "operationId": "ListCalendarView",
+        "summary": "List my calendar events in a time window",
+        "description": "GET /me/calendarView - occurrences between startDateTime and endDateTime (recurring meetings expanded).",
+        "parameters": [
+          { "name": "startDateTime", "in": "query", "required": true, "type": "string", "x-ms-summary": "Start (UTC ISO 8601)" },
+          { "name": "endDateTime", "in": "query", "required": true, "type": "string", "x-ms-summary": "End (UTC ISO 8601)" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/orderby" },
+          { "$ref": "#/parameters/top" },
+          { "$ref": "#/parameters/skip" },
+          { "$ref": "#/parameters/skiptoken" },
+          { "$ref": "#/parameters/Prefer" }
+        ],
+        "responses": { "200": { "description": "OK", "schema": { "type": "object" } }, "default": { "description": "Error", "schema": { "type": "object" } } }
+      }
+    },
+    "/v1.0/me/calendar/getSchedule": {
+      "post": {
+        "operationId": "GetSchedule",
+        "summary": "Get free/busy for people",
+        "description": "POST /me/calendar/getSchedule - read-only free/busy lookup.",
+        "parameters": [
+          { "name": "body", "in": "body", "required": true, "schema": { "type": "object" } },
+          { "$ref": "#/parameters/Prefer" }
+        ],
+        "responses": { "200": { "description": "OK", "schema": { "type": "object" } }, "default": { "description": "Error", "schema": { "type": "object" } } }
+      }
+    },
+    "/v1.0/search/query": {
+      "post": {
+        "operationId": "SearchQuery",
+        "summary": "Microsoft Search query",
+        "description": "POST /search/query - read-only search over mail, events, files and Teams messages the user can access.",
+        "parameters": [
+          { "name": "body", "in": "body", "required": true, "schema": { "type": "object" } }
+        ],
+        "responses": { "200": { "description": "OK", "schema": { "type": "object" } }, "default": { "description": "Error", "schema": { "type": "object" } } }
+      }
+    },
+    "/v1.0/me/mailFolders/inbox/messages": {
+      "get": {
+        "operationId": "ListInboxMessages",
+        "summary": "List my inbox messages",
+        "description": "GET /me/mailFolders/inbox/messages.",
+        "parameters": [
+          { "$ref": "#/parameters/filter" },
+          { "$ref": "#/parameters/orderby" },
+          { "$ref": "#/parameters/top" },
+          { "$ref": "#/parameters/select" }
+        ],
+        "responses": { "200": { "description": "OK", "schema": { "type": "object" } }, "default": { "description": "Error", "schema": { "type": "object" } } }
+      }
+    },
+    "/v1.0/me/chats": {
+      "get": {
+        "operationId": "ListChats",
+        "summary": "List my Teams chats",
+        "description": "GET /me/chats - chats the signed-in user is part of.",
+        "parameters": [
+          { "$ref": "#/parameters/expand" },
+          { "$ref": "#/parameters/orderby" },
+          { "$ref": "#/parameters/top" }
+        ],
+        "responses": { "200": { "description": "OK", "schema": { "type": "object" } }, "default": { "description": "Error", "schema": { "type": "object" } } }
+      }
+    },
+    "/v1.0/me/chats/{chatId}/messages": {
+      "get": {
+        "operationId": "ListChatMessages",
+        "summary": "List messages in one of my Teams chats",
+        "description": "GET /me/chats/{chatId}/messages.",
+        "parameters": [
+          { "name": "chatId", "in": "path", "required": true, "type": "string", "x-ms-summary": "Chat ID" },
+          { "$ref": "#/parameters/top" },
+          { "$ref": "#/parameters/orderby" }
+        ],
+        "responses": { "200": { "description": "OK", "schema": { "type": "object" } }, "default": { "description": "Error", "schema": { "type": "object" } } }
+      }
+    }
+  }
+}
